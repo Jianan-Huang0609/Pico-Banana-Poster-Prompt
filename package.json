@@ -1,0 +1,42 @@
+{
+  "name": "pico-banana-poster-generator",
+  "version": "1.0.0",
+  "description": "科研海报AI生成指令工具 - 基于AI的科研海报设计助手",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Build completed'",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "科研海报",
+    "AI生成",
+    "设计工具",
+    "学术海报",
+    "海报模板",
+    "React",
+    "Tailwind CSS"
+  ],
+  "author": "Pico-Banana Team",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-react": "^7.22.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
