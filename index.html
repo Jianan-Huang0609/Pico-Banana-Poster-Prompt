@@ -211,18 +211,18 @@
                     </div>
 
                     {/* 配置面板 */}
-                    <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                        {/* 左侧：设计风格和学科领域 */}
-                        <div className="space-y-6">
+                    <div className="max-w-6xl mx-auto mb-8">
+                        {/* 上方选择栏 - 四块区域 */}
+                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
                             {/* 设计风格选择 */}
                             <div className="bg-white rounded-lg p-6 shadow-lg">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 选择设计风格</h3>
-                                <div className="grid grid-cols-2 gap-3">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 设计风格</h3>
+                                <div className="space-y-3">
                                     {styles.map((style) => (
                                         <button
                                             key={style.id}
                                             onClick={() => setSelectedStyle(style.id)}
-                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                            className={`w-full p-3 rounded-lg border-2 transition-all ${
                                                 selectedStyle === style.id
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-gray-300'
@@ -236,13 +236,13 @@
 
                             {/* 学科领域选择 */}
                             <div className="bg-white rounded-lg p-6 shadow-lg">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🔬 选择学科领域</h3>
-                                <div className="grid grid-cols-2 gap-3">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🔬 学科领域</h3>
+                                <div className="space-y-3">
                                     {fields.map((field) => (
                                         <button
                                             key={field.id}
                                             onClick={() => setSelectedField(field.id)}
-                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                            className={`w-full p-3 rounded-lg border-2 transition-all ${
                                                 selectedField === field.id
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-gray-300'
@@ -254,25 +254,22 @@
                                     ))}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* 右侧：配置选项 */}
-                        <div className="space-y-6">
                             {/* 色彩方案 */}
                             <div className="bg-white rounded-lg p-6 shadow-lg">
                                 <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 色彩方案</h3>
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="space-y-3">
                                     {colorSchemes.map((scheme) => (
                                         <button
                                             key={scheme.id}
                                             onClick={() => setSelectedColors(scheme.colors)}
-                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                            className={`w-full p-3 rounded-lg border-2 transition-all ${
                                                 selectedColors.join('') === scheme.colors.join('')
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-gray-300'
                                             }`}
                                         >
-                                            <div className={`w-full h-8 rounded bg-gradient-to-r ${scheme.preview} mb-2`}></div>
+                                            <div className={`w-full h-6 rounded bg-gradient-to-r ${scheme.preview} mb-2`}></div>
                                             <div className="text-sm text-gray-600">{scheme.colors.join(' + ')}</div>
                                         </button>
                                     ))}
@@ -282,12 +279,12 @@
                             {/* 布局样式 */}
                             <div className="bg-white rounded-lg p-6 shadow-lg">
                                 <h3 className="text-lg font-semibold text-gray-800 mb-4">📐 布局样式</h3>
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="space-y-3">
                                     {layouts.map((layout) => (
                                         <button
                                             key={layout.id}
                                             onClick={() => setSelectedLayout(layout.id)}
-                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                            className={`w-full p-3 rounded-lg border-2 transition-all ${
                                                 selectedLayout === layout.id
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-gray-300'
@@ -303,34 +300,41 @@
                     </div>
 
                     {/* 生成结果 */}
-                    <div className="max-w-4xl mx-auto">
+                    <div className="max-w-6xl mx-auto mb-8">
                         <div className="bg-white rounded-lg p-6 shadow-lg">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">✨ 生成的AI指令</h3>
                             <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                                <pre className="text-sm text-gray-700 whitespace-pre-wrap">{generatePrompt()}</pre>
+                                <pre className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{generatePrompt()}</pre>
                             </div>
-                            <button
-                                onClick={() => copyToClipboard(generatePrompt())}
-                                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                                📋 复制指令
-                            </button>
-                            {copiedPrompt && (
-                                <div className="mt-2 text-sm text-green-600">{copiedPrompt}</div>
-                            )}
+                            <div className="flex justify-between items-center">
+                                <button
+                                    onClick={() => copyToClipboard(generatePrompt())}
+                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                                >
+                                    📋 复制指令
+                                </button>
+                                {copiedPrompt && (
+                                    <div className="text-sm text-green-600 font-medium">{copiedPrompt}</div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
                     {/* 使用说明 */}
-                    <div className="max-w-4xl mx-auto mt-8">
+                    <div className="max-w-6xl mx-auto">
                         <div className="bg-white rounded-lg p-6 shadow-lg">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">📖 使用说明</h3>
-                            <div className="text-gray-600 space-y-2">
-                                <p>1. 选择您喜欢的设计风格和学科领域</p>
-                                <p>2. 自定义色彩方案和布局样式</p>
-                                <p>3. 系统会自动生成对应的AI指令</p>
-                                <p>4. 点击"复制指令"按钮复制到剪贴板</p>
-                                <p>5. 将指令粘贴到AI图像生成工具中</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
+                                <div className="space-y-2">
+                                    <p className="flex items-center"><span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>选择您喜欢的设计风格和学科领域</p>
+                                    <p className="flex items-center"><span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>自定义色彩方案和布局样式</p>
+                                    <p className="flex items-center"><span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>系统会自动生成对应的AI指令</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <p className="flex items-center"><span className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">4</span>点击"复制指令"按钮复制到剪贴板</p>
+                                    <p className="flex items-center"><span className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">5</span>将指令粘贴到AI图像生成工具中</p>
+                                    <p className="flex items-center"><span className="w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">6</span>享受AI生成的精美科研海报！</p>
+                                </div>
                             </div>
                         </div>
                     </div>
