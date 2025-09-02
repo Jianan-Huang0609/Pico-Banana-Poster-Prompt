@@ -68,11 +68,276 @@
 <body class="bg-gray-50 min-h-screen">
     <div id="root"></div>
     
-    <!-- 主应用脚本 -->
-    <script type="text/babel" src="PosterPromptGenerator.jsx"></script>
-    
     <!-- 应用挂载脚本 -->
     <script type="text/babel">
+        // 简化的PosterPromptGenerator组件
+        const PosterPromptGenerator = () => {
+            const [selectedStyle, setSelectedStyle] = React.useState('modern');
+            const [selectedField, setSelectedField] = React.useState('biomedical');
+            const [selectedColors, setSelectedColors] = React.useState(['blue', 'white']);
+            const [selectedLayout, setSelectedLayout] = React.useState('three-column');
+            const [selectedTypography, setSelectedTypography] = React.useState('sans-serif');
+            const [selectedIcons, setSelectedIcons] = React.useState('minimal');
+            const [flippedCards, setFlippedCards] = React.useState(new Set());
+            const [copiedPrompt, setCopiedPrompt] = React.useState(null);
+
+            // 配置选项
+            const styles = [
+                { id: 'modern', name: '现代简约', color: 'bg-slate-100' },
+                { id: 'academic', name: '学术经典', color: 'bg-blue-100' },
+                { id: 'creative', name: '创意设计', color: 'bg-purple-100' },
+                { id: 'minimal', name: '极简主义', color: 'bg-gray-100' },
+                { id: 'professional', name: '商务专业', color: 'bg-green-100' }
+            ];
+
+            const fields = [
+                { id: 'biomedical', name: '生物医学', icon: '🧬' },
+                { id: 'physics', name: '物理科学', icon: '⚛️' },
+                { id: 'engineering', name: '工程技术', icon: '⚙️' },
+                { id: 'chemistry', name: '化学材料', icon: '🧪' },
+                { id: 'computer', name: '计算机', icon: '💻' },
+                { id: 'mathematics', name: '数学统计', icon: '📊' },
+                { id: 'environment', name: '环境科学', icon: '🌱' },
+                { id: 'social', name: '社会科学', icon: '👥' }
+            ];
+
+            const colorSchemes = [
+                { id: 'blue-white', colors: ['blue', 'white'], preview: 'from-blue-600 to-white' },
+                { id: 'navy-gold', colors: ['navy', 'gold'], preview: 'from-blue-900 to-yellow-400' },
+                { id: 'green-cream', colors: ['green', 'cream'], preview: 'from-green-600 to-amber-50' },
+                { id: 'purple-gray', colors: ['purple', 'gray'], preview: 'from-purple-600 to-gray-300' },
+                { id: 'red-black', colors: ['red', 'black'], preview: 'from-red-600 to-gray-900' },
+                { id: 'teal-white', colors: ['teal', 'white'], preview: 'from-teal-600 to-white' }
+            ];
+
+            const layouts = [
+                { id: 'three-column', name: '三栏布局', icon: '|||' },
+                { id: 'asymmetric', name: '非对称', icon: '|:|' },
+                { id: 'grid', name: '网格布局', icon: '⚏' },
+                { id: 'flow', name: '流式布局', icon: '≈' }
+            ];
+
+            const typography = [
+                { id: 'sans-serif', name: 'Sans-serif', example: 'Arial, Helvetica' },
+                { id: 'serif', name: 'Serif', example: 'Times, Georgia' },
+                { id: 'modern', name: 'Modern', example: 'Roboto, Open Sans' },
+                { id: 'academic', name: 'Academic', example: 'Computer Modern' }
+            ];
+
+            const iconStyles = [
+                { id: 'minimal', name: '极简图标' },
+                { id: 'detailed', name: '详细图标' },
+                { id: 'scientific', name: '科学符号' },
+                { id: 'geometric', name: '几何图形' }
+            ];
+
+            // 生成Prompt
+            const generatePrompt = () => {
+                const styleMap = {
+                    modern: '现代简约设计，大胆排版，充足留白',
+                    academic: '传统学术风格，经典布局，专业严谨',
+                    creative: '创意视觉设计，独特布局，吸引眼球',
+                    minimal: '极简主义，最少元素，清晰焦点',
+                    professional: '商务专业，正式布局，权威感强'
+                };
+
+                const fieldMap = {
+                    biomedical: '生物医学研究海报，包含实验流程图、统计图表、分子结构图',
+                    physics: '物理科学海报，包含方程式、实验装置图、数据分析图表',
+                    engineering: '工程技术海报，包含系统框图、技术流程、性能对比图',
+                    chemistry: '化学研究海报，包含化学结构式、反应机理图、光谱数据',
+                    computer: '计算机科学海报，包含算法流程图、系统架构图、性能测试图',
+                    mathematics: '数学统计海报，包含数学公式、统计图表、证明过程',
+                    environment: '环境科学海报，包含生态图表、监测数据、地理信息图',
+                    social: '社会科学海报，包含调查数据、统计分析、社会网络图'
+                };
+
+                const layoutMap = {
+                    'three-column': '三栏式布局：左侧介绍，中间结果，右侧讨论',
+                    'asymmetric': '非对称布局：主要内容占据2/3，次要信息1/3',
+                    'grid': '网格布局：均匀分布的模块化内容区域',
+                    'flow': '流式布局：内容自然流动，重点突出'
+                };
+
+                const colorText = selectedColors.join('和');
+                const layoutText = layoutMap[selectedLayout];
+                const styleText = styleMap[selectedStyle];
+                const fieldText = fieldMap[selectedField];
+
+                return `请生成一个${fieldText}的科研海报，要求：
+设计风格：${styleText}
+布局方式：${layoutText}
+色彩搭配：${colorText}配色方案
+字体选择：${typography.find(t => t.id === selectedTypography)?.name}
+图标风格：${iconStyles.find(i => i.id === selectedIcons)?.name}
+
+请确保海报具有：
+1. 清晰的视觉层次
+2. 专业的设计美感
+3. 适合学术展示的布局
+4. 良好的可读性`;
+            };
+
+            const toggleCard = (cardId) => {
+                const newFlipped = new Set(flippedCards);
+                if (newFlipped.has(cardId)) {
+                    newFlipped.delete(cardId);
+                } else {
+                    newFlipped.add(cardId);
+                }
+                setFlippedCards(newFlipped);
+            };
+
+            const copyToClipboard = async (text) => {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    setCopiedPrompt('已复制到剪贴板！');
+                    setTimeout(() => setCopiedPrompt(null), 2000);
+                } catch (err) {
+                    console.error('复制失败:', err);
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+                    {/* 头部 */}
+                    <div className="text-center mb-8">
+                        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                            🍌 Pico-Banana
+                        </h1>
+                        <p className="text-xl text-gray-600">
+                            科研海报AI生成指令工具
+                        </p>
+                    </div>
+
+                    {/* 配置面板 */}
+                    <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        {/* 左侧：设计风格和学科领域 */}
+                        <div className="space-y-6">
+                            {/* 设计风格选择 */}
+                            <div className="bg-white rounded-lg p-6 shadow-lg">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 选择设计风格</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {styles.map((style) => (
+                                        <button
+                                            key={style.id}
+                                            onClick={() => setSelectedStyle(style.id)}
+                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                                selectedStyle === style.id
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                            } ${style.color}`}
+                                        >
+                                            <div className="font-medium text-gray-800">{style.name}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 学科领域选择 */}
+                            <div className="bg-white rounded-lg p-6 shadow-lg">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🔬 选择学科领域</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {fields.map((field) => (
+                                        <button
+                                            key={field.id}
+                                            onClick={() => setSelectedField(field.id)}
+                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                                selectedField === field.id
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                            }`}
+                                        >
+                                            <div className="text-2xl mb-1">{field.icon}</div>
+                                            <div className="font-medium text-gray-800">{field.name}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 右侧：配置选项 */}
+                        <div className="space-y-6">
+                            {/* 色彩方案 */}
+                            <div className="bg-white rounded-lg p-6 shadow-lg">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 色彩方案</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {colorSchemes.map((scheme) => (
+                                        <button
+                                            key={scheme.id}
+                                            onClick={() => setSelectedColors(scheme.colors)}
+                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                                selectedColors.join('') === scheme.colors.join('')
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                            }`}
+                                        >
+                                            <div className={`w-full h-8 rounded bg-gradient-to-r ${scheme.preview} mb-2`}></div>
+                                            <div className="text-sm text-gray-600">{scheme.colors.join(' + ')}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 布局样式 */}
+                            <div className="bg-white rounded-lg p-6 shadow-lg">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">📐 布局样式</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {layouts.map((layout) => (
+                                        <button
+                                            key={layout.id}
+                                            onClick={() => setSelectedLayout(layout.id)}
+                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                                selectedLayout === layout.id
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                            }`}
+                                        >
+                                            <div className="text-2xl mb-1">{layout.icon}</div>
+                                            <div className="font-medium text-gray-800">{layout.name}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 生成结果 */}
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-white rounded-lg p-6 shadow-lg">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">✨ 生成的AI指令</h3>
+                            <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                                <pre className="text-sm text-gray-700 whitespace-pre-wrap">{generatePrompt()}</pre>
+                            </div>
+                            <button
+                                onClick={() => copyToClipboard(generatePrompt())}
+                                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                📋 复制指令
+                            </button>
+                            {copiedPrompt && (
+                                <div className="mt-2 text-sm text-green-600">{copiedPrompt}</div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 使用说明 */}
+                    <div className="max-w-4xl mx-auto mt-8">
+                        <div className="bg-white rounded-lg p-6 shadow-lg">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">📖 使用说明</h3>
+                            <div className="text-gray-600 space-y-2">
+                                <p>1. 选择您喜欢的设计风格和学科领域</p>
+                                <p>2. 自定义色彩方案和布局样式</p>
+                                <p>3. 系统会自动生成对应的AI指令</p>
+                                <p>4. 点击"复制指令"按钮复制到剪贴板</p>
+                                <p>5. 将指令粘贴到AI图像生成工具中</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const App = () => {
             return (
                 <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
