@@ -128,7 +128,48 @@
                 { id: 'minimal', name: '极简图标' },
                 { id: 'detailed', name: '详细图标' },
                 { id: 'scientific', name: '科学符号' },
-                { id: 'geometric', name: '几何图形' }
+                { id: 'geometric', name: '几何图形' },
+                { id: 'tech-futuristic', name: '科技未来' }
+            ];
+
+            // 科技感视觉优化选项
+            const [showTechOptions, setShowTechOptions] = React.useState(false);
+            const [selectedTechIcon, setSelectedTechIcon] = React.useState('ai-brain');
+            const [selectedTechBackground, setSelectedTechBackground] = React.useState('dark-gradient');
+            const [selectedTechColors, setSelectedTechColors] = React.useState(['cyan', 'blue']);
+            const [selectedTechFont, setSelectedTechFont] = React.useState('futuristic');
+
+            const techIconStyles = [
+                { id: 'ai-brain', name: 'AI脑', icon: '🧠' },
+                { id: 'chip', name: '芯片', icon: '🔌' },
+                { id: 'data-cloud', name: '数据云', icon: '☁️' },
+                { id: 'server', name: '服务器', icon: '🖥️' },
+                { id: 'microscope', name: '显微镜', icon: '🔬' },
+                { id: 'flow-arrow', name: '流程箭头', icon: '➡️' }
+            ];
+
+            const techBackgrounds = [
+                { id: 'dark-gradient', name: '深色渐变', preview: 'from-navy-900 to-black' },
+                { id: 'grid-pattern', name: '网格图案', preview: 'from-cyan-600 to-blue-800' },
+                { id: 'circuit-trace', name: '电路轨迹', preview: 'from-teal-600 to-purple-800' },
+                { id: 'hexagonal', name: '六边形', preview: 'from-blue-600 to-indigo-800' },
+                { id: 'holographic', name: '全息风格', preview: 'from-cyan-500 to-magenta-600' }
+            ];
+
+            const techColorSchemes = [
+                { id: 'cyan-blue', colors: ['cyan', 'blue'], preview: 'from-cyan-400 to-blue-600' },
+                { id: 'teal-purple', colors: ['teal', 'purple'], preview: 'from-teal-500 to-purple-600' },
+                { id: 'blue-green', colors: ['blue', 'green'], preview: 'from-blue-500 to-green-500' },
+                { id: 'cyan-magenta', colors: ['cyan', 'magenta'], preview: 'from-cyan-400 to-pink-500' },
+                { id: 'neon-glow', colors: ['cyan', 'teal'], preview: 'from-cyan-300 to-teal-400' }
+            ];
+
+            const techFonts = [
+                { id: 'futuristic', name: '未来科技', example: 'Orbitron, Eurostile' },
+                { id: 'cyberpunk', name: '赛博朋克', example: 'Rajdhani, Exo 2' },
+                { id: 'holographic', name: '全息风格', example: 'Audiowide, Righteous' },
+                { id: 'modern-tech', name: '现代科技', example: 'Roboto, Open Sans' },
+                { id: 'sci-fi', name: '科幻风格', example: 'Chakra Petch, Space Mono' }
             ];
 
             // 生成Prompt
@@ -164,12 +205,30 @@
                 const styleText = styleMap[selectedStyle];
                 const fieldText = fieldMap[selectedField];
 
+                // 科技感视觉优化部分
+                let techPrompt = '';
+                if (showTechOptions) {
+                    const techIconText = techIconStyles.find(t => t.id === selectedTechIcon)?.name || '';
+                    const techBackgroundText = techBackgrounds.find(t => t.id === selectedTechBackground)?.name || '';
+                    const techColorText = selectedTechColors.join('和');
+                    const techFontText = techFonts.find(t => t.id === selectedTechFont)?.name || '';
+
+                    techPrompt = `
+
+科技感视觉优化要求：
+- Icon风格：${techIconText}，使用矢量风格图标，平面设计配合霓虹光效
+- 背景结构：${techBackgroundText}，深色渐变背景配合发光网格线、电路轨迹、六边形图案
+- 配色光效：${techColorText}配色方案，主色调配合霓虹发光效果，全息渐变高光
+- 字体排版：${techFontText}字体，未来感无衬线字体，大标题配合发光轮廓，确保24pt+的可读性
+- 整体风格：赛博朋克、全息风格、专业学术的科技感设计`;
+                }
+
                 return `请生成一个${fieldText}的科研海报，要求：
 设计风格：${styleText}
 布局方式：${layoutText}
 色彩搭配：${colorText}配色方案
 字体选择：${typography.find(t => t.id === selectedTypography)?.name}
-图标风格：${iconStyles.find(i => i.id === selectedIcons)?.name}
+图标风格：${iconStyles.find(i => i.id === selectedIcons)?.name}${techPrompt}
 
 请确保海报具有：
 1. 清晰的视觉层次
@@ -208,6 +267,25 @@
                         <p className="text-xl text-gray-600">
                             科研海报AI生成指令工具
                         </p>
+                    </div>
+
+                    {/* 科技感选项切换 */}
+                    <div className="max-w-6xl mx-auto mb-6">
+                        <div className="bg-white rounded-lg p-4 shadow-lg">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-semibold text-gray-800">🚀 科技感视觉优化</h3>
+                                <button
+                                    onClick={() => setShowTechOptions(!showTechOptions)}
+                                    className={`px-4 py-2 rounded-lg transition-colors ${
+                                        showTechOptions 
+                                            ? 'bg-blue-600 text-white' 
+                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                    }`}
+                                >
+                                    {showTechOptions ? '隐藏科技选项' : '启用科技选项'}
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     {/* 配置面板 */}
@@ -298,6 +376,97 @@
                             </div>
                         </div>
                     </div>
+
+                    {/* 科技感配置面板 - 仅在启用时显示 */}
+                    {showTechOptions && (
+                        <div className="max-w-6xl mx-auto mb-8">
+                            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                                {/* 科技Icon风格 */}
+                                <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg p-6 shadow-lg border border-cyan-200">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">🔌 科技Icon</h3>
+                                    <div className="space-y-3">
+                                        {techIconStyles.map((icon) => (
+                                            <button
+                                                key={icon.id}
+                                                onClick={() => setSelectedTechIcon(icon.id)}
+                                                className={`w-full p-3 rounded-lg border-2 transition-all ${
+                                                    selectedTechIcon === icon.id
+                                                        ? 'border-cyan-500 bg-cyan-50'
+                                                        : 'border-gray-200 hover:border-cyan-300'
+                                                }`}
+                                            >
+                                                <div className="text-2xl mb-1">{icon.icon}</div>
+                                                <div className="font-medium text-gray-800">{icon.name}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* 科技背景 */}
+                                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-lg p-6 shadow-lg border border-purple-200">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">🌌 科技背景</h3>
+                                    <div className="space-y-3">
+                                        {techBackgrounds.map((bg) => (
+                                            <button
+                                                key={bg.id}
+                                                onClick={() => setSelectedTechBackground(bg.id)}
+                                                className={`w-full p-3 rounded-lg border-2 transition-all ${
+                                                    selectedTechBackground === bg.id
+                                                        ? 'border-purple-500 bg-purple-50'
+                                                        : 'border-gray-200 hover:border-purple-300'
+                                                }`}
+                                            >
+                                                <div className={`w-full h-6 rounded bg-gradient-to-r ${bg.preview} mb-2`}></div>
+                                                <div className="font-medium text-gray-800">{bg.name}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* 科技配色 */}
+                                <div className="bg-gradient-to-br from-teal-50 to-green-50 rounded-lg p-6 shadow-lg border border-teal-200">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 科技配色</h3>
+                                    <div className="space-y-3">
+                                        {techColorSchemes.map((scheme) => (
+                                            <button
+                                                key={scheme.id}
+                                                onClick={() => setSelectedTechColors(scheme.colors)}
+                                                className={`w-full p-3 rounded-lg border-2 transition-all ${
+                                                    selectedTechColors.join('') === scheme.colors.join('')
+                                                        ? 'border-teal-500 bg-teal-50'
+                                                        : 'border-gray-200 hover:border-teal-300'
+                                                }`}
+                                            >
+                                                <div className={`w-full h-6 rounded bg-gradient-to-r ${scheme.preview} mb-2`}></div>
+                                                <div className="text-sm text-gray-600">{scheme.colors.join(' + ')}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* 科技字体 */}
+                                <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-lg p-6 shadow-lg border border-pink-200">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">🔤 科技字体</h3>
+                                    <div className="space-y-3">
+                                        {techFonts.map((font) => (
+                                            <button
+                                                key={font.id}
+                                                onClick={() => setSelectedTechFont(font.id)}
+                                                className={`w-full p-3 rounded-lg border-2 transition-all ${
+                                                    selectedTechFont === font.id
+                                                        ? 'border-pink-500 bg-pink-50'
+                                                        : 'border-gray-200 hover:border-pink-300'
+                                                }`}
+                                            >
+                                                <div className="font-medium text-gray-800">{font.name}</div>
+                                                <div className="text-xs text-gray-500">{font.example}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* 下方两个栏 - 确保宽度完全一致 */}
                     <div className="max-w-6xl mx-auto space-y-6">
