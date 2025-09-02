@@ -234,27 +234,6 @@
                                 </div>
                             </div>
 
-                            {/* 学科领域选择 */}
-                            <div className="bg-white rounded-lg p-6 shadow-lg">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🔬 学科领域</h3>
-                                <div className="space-y-3">
-                                    {fields.map((field) => (
-                                        <button
-                                            key={field.id}
-                                            onClick={() => setSelectedField(field.id)}
-                                            className={`w-full p-3 rounded-lg border-2 transition-all ${
-                                                selectedField === field.id
-                                                    ? 'border-blue-500 bg-blue-50'
-                                                    : 'border-gray-200 hover:border-gray-300'
-                                            }`}
-                                        >
-                                            <div className="text-2xl mb-1">{field.icon}</div>
-                                            <div className="font-medium text-gray-800">{field.name}</div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
                             {/* 色彩方案 */}
                             <div className="bg-white rounded-lg p-6 shadow-lg">
                                 <h3 className="text-lg font-semibold text-gray-800 mb-4">🎨 色彩方案</h3>
@@ -271,6 +250,27 @@
                                         >
                                             <div className={`w-full h-6 rounded bg-gradient-to-r ${scheme.preview} mb-2`}></div>
                                             <div className="text-sm text-gray-600">{scheme.colors.join(' + ')}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 学科领域选择 */}
+                            <div className="bg-white rounded-lg p-6 shadow-lg">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">🔬 学科领域</h3>
+                                <div className="space-y-3">
+                                    {fields.map((field) => (
+                                        <button
+                                            key={field.id}
+                                            onClick={() => setSelectedField(field.id)}
+                                            className={`w-full p-3 rounded-lg border-2 transition-all ${
+                                                selectedField === field.id
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                            }`}
+                                        >
+                                            <div className="text-2xl mb-1">{field.icon}</div>
+                                            <div className="font-medium text-gray-800">{field.name}</div>
                                         </button>
                                     ))}
                                 </div>
@@ -299,8 +299,9 @@
                         </div>
                     </div>
 
-                    {/* 生成结果 */}
-                    <div className="max-w-6xl mx-auto mb-8">
+                    {/* 下方两个栏 - 确保宽度完全一致 */}
+                    <div className="max-w-6xl mx-auto space-y-6">
+                        {/* 生成结果 */}
                         <div className="bg-white rounded-lg p-6 shadow-lg">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">✨ 生成的AI指令</h3>
                             <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -318,10 +319,8 @@
                                 )}
                             </div>
                         </div>
-                    </div>
 
-                    {/* 使用说明 */}
-                    <div className="max-w-6xl mx-auto">
+                        {/* 使用说明 */}
                         <div className="bg-white rounded-lg p-6 shadow-lg">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">📖 使用说明</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
